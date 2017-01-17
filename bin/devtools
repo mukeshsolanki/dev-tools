@@ -16,10 +16,9 @@ if isCaskInstalled != true
   project.installCask()
 end
 
-if params.app_name != ""
+if params.app_name.to_s.strip.length != 0
   project.installApp(params.app_name)
-elsif params.environment != ""
-  puts params.environment
+elsif params.environment.to_s.strip.length != 0
   project.setupEnvironment(params.environment)
 elsif params.list == "list"
   project.listApps()

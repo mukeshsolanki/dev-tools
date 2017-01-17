@@ -21,7 +21,18 @@ module Devtools
     end
 
     def setupEnvironment (environment)
-      puts environment
+      if !File.exists?(environment) then
+        puts colorize("Error: Invalid file path", "red")
+      elsif !environment.include? ".yml"
+        puts colorize("Error: Invalid file type only yml config files are accepted", "red")
+      else
+        puts colorize("Info: Reading environment", "green")
+        env_setup_file = open environment
+        env_setup_file.each do |line|
+           puts line
+        end
+        env_setup_file.close
+      end
       exit
     end
 
