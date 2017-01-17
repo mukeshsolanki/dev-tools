@@ -1,29 +1,134 @@
 require "devtools/version"
+require 'fileutils'
 require 'optparse'
 require 'ostruct'
 require 'etc'
 
 module Devtools
   class DevToolsProject
-    def installApp (appname)
+    def installApp (appname, exitStatus)
+      search_output = %x( brew cask search #{appname} )
+      if search_output.include? "Exact match"
         puts colorize("Info: Installing #{appname}", "yellow")
         console_output = %x( brew cask install #{appname} )
         puts console_output
+      elsif search_output.include? "No Cask found"
+        puts colorize("Error: No such app found", "red")
+      else
+        puts search_output
+      end
+      if exitStatus == true
+        exit
+      end
+    end
+
+    def installEnvironment(environment)
+      if environment.casecmp("git")
+        setupGit()
+      elsif environment.casecmp("ruby-on-rails")
+        setupRubyOnRails()
+      elsif environment.casecmp("postgres")
+        setupPostgres()
+      elsif environment.casecmp("android")
+        setupAndroidStudio()
+      elsif environment.casecmp("python")
+        setupPython()
+      elsif environment.casecmp("python3")
+        setupPython3()
+      elsif environment.casecmp("node")
+        setupNode()
+      end
+    end
+
+    def setupNode()
+      puts colorize("Info: Installing Node", "green")
+      node_console_output = %x( brew install node )
+      puts node_console_output
+    end
+
+    def setupPython3()
+      puts colorize("Info: Installing Python 3", "green")
+      python3_console_output = %x( brew install python3 )
+      puts python3_console_output
+    end
+
+    def setupPython()
+      puts colorize("Info: Installing Python 2.7", "green")
+      python_console_output = %x( brew install python )
+      puts python_console_output
+    end
+
+    def setupAndroidStudio()
+      puts colorize("Info: Installing Android Studio", "green")
+      andrid_console_output = %x( brew cask install android-studio )
+      puts andrid_console_output
+    end
+
+    def setupPostgres()
+      puts colorize("Info: Installing Postgres", "green")
+      postgres_console_output = %x( brew cask install postgres )
+      puts postgres_console_output
+    end
+
+    def setupGit()
+      puts colorize("Info: Installing Git", "green")
+      git_console_output = %x( brew install bash curl git )
+      puts git_console_output
+    end
+
+    def setupRubyOnRails()
+      puts colorize("Info: Installing RVM", "green")
+      gpg_console_output = %x( gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 )
+      puts gpg_console_output
+      rvm_console_output = %x( \\curl -sSL https://get.rvm.io | bash -s stable )
+      puts rvm_console_output
+      puts colorize("Info: Installing Ruby", "green")
+      ruby_console_output = %x( \\curl -L https://get.rvm.io | bash -s stable --ruby )
+      puts ruby_console_output
+      puts colorize("Info: Installing Rails", "green")
+      rails_console_output = %x( gem install rails )
+      puts rails_console_output
+      setupPostgres()
     end
 
     def setupEnvironment (environment)
-        puts colorize("Environment to setup #{environment}", "yellow")
+      if !File.exists?(environment) then
+        puts colorize("Error: Invalid file path", "red")
+      elsif !environment.include? ".yml"
+        puts colorize("Error: Invalid file type only yml config files are accepted", "red")
+      else
+        isAppMode = true
+        puts colorize("Info: Reading environment", "green")
+        env_setup_file = open environment
+        env_setup_file.each do |line|
+          currentLine = line.to_s.strip
+          if currentLine.include? "Apps:"
+            isAppMode = true
+          elsif currentLine.include? "Environment:"
+            isAppMode = false
+          end
+          if currentLine != "Apps:" && currentLine != "Environment:"
+            if isAppMode == true
+              installApp(currentLine, false)
+            else
+              installEnvironment(currentLine)
+            end
+          end
+        end
+        env_setup_file.close
+      end
+      exit
     end
 
     def parseInput()
       params = OpenStruct.new
       OptionParser.new do |opt|
         opt.on('-i', '--install APP_NAME', 'The flag used to indicate the tool that needs to be installed.') { |o| params.app_name = o }
-        opt.on('-s', '--setup ENVIRONMENT', 'The development environment to setup.') { |o| params.environment_name = o }
+        opt.on('-e', '--environment ENVIRONMENT', 'Path to the file that contains the information about the development environment to setup.') { |o| params.environment = o }
         opt.on('-l', '--list', 'Displays a list of apps that can be installed.') { params.list = "list" }
       end.parse!
 
-      if params.app_name.to_s.strip.length == 0  && params.environment_name.to_s.strip.length == 0 && params.list.to_s.strip.length == 0
+      if params.app_name.to_s.strip.length == 0  && params.environment.to_s.strip.length == 0 && params.list.to_s.strip.length == 0
         puts colorize("Error: Missing option", "Red")
         options = %x( devtools -h )
         puts options
