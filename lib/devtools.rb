@@ -23,9 +23,23 @@ module Devtools
     end
 
     def installEnvironment(environment)
-      if environment.casecmp(ruby)
-        
+      if environment.casecmp("ruby")
+        setupRuby()
       end
+    end
+
+    def setupRuby()
+      puts colorize("Info: Installing RVM", "green")
+      gpg_console_output = %x( gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 )
+      puts gpg_console_output
+      rvm_console_output = %x( \\curl -sSL https://get.rvm.io | bash -s stable )
+      puts rvm_console_output
+      puts colorize("Info: Installing Ruby", "green")
+      ruby_console_output = %x( \\curl -L https://get.rvm.io | bash -s stable --ruby )
+      puts ruby_console_output
+      puts colorize("Info: Installing Rails", "green")
+      rails_console_output = %x( gem install rails )
+      puts rails_console_output
     end
     def setupEnvironment (environment)
       if !File.exists?(environment) then
@@ -43,10 +57,12 @@ module Devtools
           elsif currentLine.include? "Environment:"
             isAppMode = false
           end
-          if isAppMode == true && currentLine != "Apps:" && currentLine != "Environment:"
-            installApp(currentLine, false)
-          else
-            installEnvironment(currentLine)
+          if currentLine != "Apps:" && currentLine != "Environment:"
+            if isAppMode == true
+              installApp(currentLine, false)
+            else
+              installEnvironment(currentLine)
+            end
           end
         end
         env_setup_file.close
