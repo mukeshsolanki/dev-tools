@@ -1,11 +1,14 @@
 require "devtools/version"
 require 'optparse'
 require 'ostruct'
+require 'etc'
 
 module Devtools
   class DevToolsProject
-    def install (appname)
-        puts colorize("App to install #{appname}", "yellow")
+    def installApp (appname)
+        puts colorize("Info: Installing #{appname}", "yellow")
+        console_output = %x( brew cask install #{appname} )
+        puts console_output
     end
 
     def setupEnvironment (environment)
@@ -17,9 +20,10 @@ module Devtools
       OptionParser.new do |opt|
         opt.on('-i', '--install APP_NAME', 'The flag used to indicate the tool that needs to be installed.') { |o| params.app_name = o }
         opt.on('-s', '--setup ENVIRONMENT', 'The development environment to setup.') { |o| params.environment_name = o }
+        opt.on('-l', '--list', 'Displays a list of apps that can be installed.') { params.list = "list" }
       end.parse!
 
-      if params.app_name.to_s.strip.length == 0  && params.environment_name.to_s.strip.length == 0
+      if params.app_name.to_s.strip.length == 0  && params.environment_name.to_s.strip.length == 0 && params.list.to_s.strip.length == 0
         puts colorize("Error: Missing option", "Red")
         options = %x( devtools -h )
         puts options
@@ -36,6 +40,35 @@ module Devtools
       else
         return true
       end
+    end
+
+    def installBrew()
+      puts colorize("Info: Installing Brew", "yellow")
+      console_output = %x( /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" )
+      puts console_output
+    end
+
+    def checkifCaskInstalled()
+      check_cask = %x( brew info cask )
+      if check_cask.include? "Not installed"
+        return false
+      else
+        return true
+      end
+    end
+
+    def installCask()
+      puts colorize("Info: Installing Cask", "yellow")
+      console_output = %x( brew install cask )
+      puts console_output
+    end
+
+    def listApps()
+      puts colorize("Info: List of apps you can install", "yellow")
+      console_output =  %x( brew cask search )
+      puts console_output
+      puts colorize("Info: To install any app execute `devtools -i app_name_for_the_list`", "green")
+      exit
     end
 
     def colorize(text, color = "default", bgColor = "default")
