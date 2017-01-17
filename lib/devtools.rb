@@ -23,12 +23,60 @@ module Devtools
     end
 
     def installEnvironment(environment)
-      if environment.casecmp("ruby")
-        setupRuby()
+      if environment.casecmp("git")
+        setupGit()
+      elsif environment.casecmp("ruby-on-rails")
+        setupRubyOnRails()
+      elsif environment.casecmp("postgres")
+        setupPostgres()
+      elsif environment.casecmp("android")
+        setupAndroidStudio()
+      elsif environment.casecmp("python")
+        setupPython()
+      elsif environment.casecmp("python3")
+        setupPython3()
+      elsif environment.casecmp("node")
+        setupNode()
       end
     end
 
-    def setupRuby()
+    def setupNode()
+      puts colorize("Info: Installing Node", "green")
+      node_console_output = %x( brew install node )
+      puts node_console_output
+    end
+
+    def setupPython3()
+      puts colorize("Info: Installing Python 3", "green")
+      python3_console_output = %x( brew install python3 )
+      puts python3_console_output
+    end
+
+    def setupPython()
+      puts colorize("Info: Installing Python 2.7", "green")
+      python_console_output = %x( brew install python )
+      puts python_console_output
+    end
+
+    def setupAndroidStudio()
+      puts colorize("Info: Installing Android Studio", "green")
+      andrid_console_output = %x( brew cask install android-studio )
+      puts andrid_console_output
+    end
+
+    def setupPostgres()
+      puts colorize("Info: Installing Postgres", "green")
+      postgres_console_output = %x( brew cask install postgres )
+      puts postgres_console_output
+    end
+
+    def setupGit()
+      puts colorize("Info: Installing Git", "green")
+      git_console_output = %x( brew install bash curl git )
+      puts git_console_output
+    end
+
+    def setupRubyOnRails()
       puts colorize("Info: Installing RVM", "green")
       gpg_console_output = %x( gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 )
       puts gpg_console_output
@@ -40,7 +88,9 @@ module Devtools
       puts colorize("Info: Installing Rails", "green")
       rails_console_output = %x( gem install rails )
       puts rails_console_output
+      setupPostgres()
     end
+
     def setupEnvironment (environment)
       if !File.exists?(environment) then
         puts colorize("Error: Invalid file path", "red")
