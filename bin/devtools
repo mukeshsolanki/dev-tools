@@ -4,12 +4,23 @@ require "Devtools"
 require 'optparse'
 require 'ostruct'
 
-project = Devtools::DevToolsProject.new
-
-options = OpenStruct.new
+params = OpenStruct.new
 OptionParser.new do |opt|
-  opt.on('-f', '--first_name FIRSTNAME', 'The first name') { |o| options.first_name = o }
-  opt.on('-l', '--last_name LASTNAME', 'The last name') { |o| options.last_name = o }
+  opt.on('-i', '--install APP_NAME', 'The flag used to indicate the tool that needs to be installed.') { |o| params.app_name = o }
+  opt.on('-s', '--setup ENVIRONMENT', 'The development environment to setup.') { |o| params.environment_name = o }
 end.parse!
 
-puts options.first_name + ' ' + options.last_name
+if params.app_name.to_s.strip.length == 0  && params.environment_name.to_s.strip.length == 0
+  options = %x( devtools -h )
+  puts options
+  exit
+end
+project = Devtools::DevToolsProject.new
+
+check_brew = %x( which brew )
+
+if check_brew == "brew not found"
+  puts "brew missing"
+else
+  puts "brew installed"
+end
