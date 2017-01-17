@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "Devtools"
+
+project = Devtools::DevToolsProject.new
+
+params = project.parseInput()
+isBrewInstalled = project.checkIfBrewInstalled()
