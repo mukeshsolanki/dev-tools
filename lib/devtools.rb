@@ -6,7 +6,7 @@ require 'etc'
 
 module Devtools
   class DevToolsProject
-    def installApp (appname)
+    def installApp (appname, exitStatus)
       search_output = %x( brew cask search #{appname} )
       if search_output.include? "Exact match"
         puts colorize("Info: Installing #{appname}", "yellow")
@@ -17,19 +17,37 @@ module Devtools
       else
         puts search_output
       end
-      exit
+      if exitStatus == true
+        exit
+      end
     end
 
+    def installEnvironment(environment)
+      if environment.casecmp(ruby)
+        
+      end
+    end
     def setupEnvironment (environment)
       if !File.exists?(environment) then
         puts colorize("Error: Invalid file path", "red")
       elsif !environment.include? ".yml"
         puts colorize("Error: Invalid file type only yml config files are accepted", "red")
       else
+        isAppMode = true
         puts colorize("Info: Reading environment", "green")
         env_setup_file = open environment
         env_setup_file.each do |line|
-           puts line
+          currentLine = line.to_s.strip
+          if currentLine.include? "Apps:"
+            isAppMode = true
+          elsif currentLine.include? "Environment:"
+            isAppMode = false
+          end
+          if isAppMode == true && currentLine != "Apps:" && currentLine != "Environment:"
+            installApp(currentLine, false)
+          else
+            installEnvironment(currentLine)
+          end
         end
         env_setup_file.close
       end

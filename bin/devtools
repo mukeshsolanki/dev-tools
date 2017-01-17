@@ -17,7 +17,7 @@ if isCaskInstalled != true
 end
 
 if params.app_name.to_s.strip.length != 0
-  project.installApp(params.app_name)
+  project.installApp(params.app_name, true)
 elsif params.environment.to_s.strip.length != 0
   project.setupEnvironment(params.environment)
 elsif params.list == "list"
