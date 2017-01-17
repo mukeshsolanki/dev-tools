@@ -5,20 +5,22 @@ require "Devtools"
 project = Devtools::DevToolsProject.new
 
 params = project.parseInput()
+
 isBrewInstalled = project.checkIfBrewInstalled()
 if isBrewInstalled != true
   project.installBrew()
 end
+
 isCaskInstalled = project.checkifCaskInstalled()
 if isCaskInstalled != true
   project.installCask()
 end
+
 if params.app_name != ""
   project.installApp(params.app_name)
-end
-if params.environment != ""
+elsif params.environment != ""
+  puts params.environment
   project.setupEnvironment(params.environment)
-end
-if params.list == "list"
+elsif params.list == "list"
   project.listApps()
 end
