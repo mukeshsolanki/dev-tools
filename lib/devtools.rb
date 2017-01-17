@@ -1,4 +1,5 @@
 require "devtools/version"
+require 'fileutils'
 require 'optparse'
 require 'ostruct'
 require 'etc'
@@ -6,24 +7,33 @@ require 'etc'
 module Devtools
   class DevToolsProject
     def installApp (appname)
+      search_output = %x( brew cask search #{appname} )
+      if search_output.include? "Exact match"
         puts colorize("Info: Installing #{appname}", "yellow")
         console_output = %x( brew cask install #{appname} )
         puts console_output
+      elsif search_output.include? "No Cask found"
+        puts colorize("Error: No such app found", "red")
+      else
+        puts search_output
+      end
+      exit
     end
 
     def setupEnvironment (environment)
-        puts colorize("Environment to setup #{environment}", "yellow")
+      puts environment
+      exit
     end
 
     def parseInput()
       params = OpenStruct.new
       OptionParser.new do |opt|
         opt.on('-i', '--install APP_NAME', 'The flag used to indicate the tool that needs to be installed.') { |o| params.app_name = o }
-        opt.on('-s', '--setup ENVIRONMENT', 'The development environment to setup.') { |o| params.environment_name = o }
+        opt.on('-e', '--environment ENVIRONMENT', 'Path to the file that contains the information about the development environment to setup.') { |o| params.environment = o }
         opt.on('-l', '--list', 'Displays a list of apps that can be installed.') { params.list = "list" }
       end.parse!
 
-      if params.app_name.to_s.strip.length == 0  && params.environment_name.to_s.strip.length == 0 && params.list.to_s.strip.length == 0
+      if params.app_name.to_s.strip.length == 0  && params.environment.to_s.strip.length == 0 && params.list.to_s.strip.length == 0
         puts colorize("Error: Missing option", "Red")
         options = %x( devtools -h )
         puts options
