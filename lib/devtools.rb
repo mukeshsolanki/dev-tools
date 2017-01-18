@@ -172,7 +172,8 @@ module Devtools
       puts colorize("Info: List of apps you can install", "yellow")
       console_output =  %x( brew cask search )
       puts console_output
-      puts colorize("Info: To install any app execute `dev-tools -i app_name_for_the_list`", "green")
+      puts colorize("Info: List of environment you can setup", "yellow")
+      puts "git\nruby-on-rails\npostgres\nandroid\npython\npython3\nnode"
       exit
     end
 
