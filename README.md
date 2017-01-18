@@ -1,4 +1,4 @@
-# Devtools
+# Dev-tools
 
 A gem that removes the hassle of setting up your machine every time you change to a new development device. DevTools is simple and easy to use it lets you setup your development environment with easy.
 
