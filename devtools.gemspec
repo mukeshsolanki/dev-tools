@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = "A gem that removes the hassel of setting up your machine evertime you change to a new development device"
   spec.description   = "DevTools is simple and easy to use it lets you setup your development enviroment with easy."
-  spec.homepage      = "https://github.com/mukeshsolanki/devtools"
+  spec.homepage      = "https://github.com/mukeshsolanki/dev-tools"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
@@ -29,5 +29,4 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.12"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "minitest", "~> 5.5.1"
 end

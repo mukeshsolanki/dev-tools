@@ -1,41 +1,41 @@
 # Devtools
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/devtools`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+A gem that removes the hassle of setting up your machine every time you change to a new development device. DevTools is simple and easy to use it lets you setup your development environment with easy.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Open Terminal and execute the following command
 
 ```ruby
-gem 'devtools'
+gem install dev-tools
 ```
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install devtools
 
 ## Usage
 
-TODO: Write usage instructions here
+Its pretty simple how this works. Fire up terminal and execute `dev-tools` with one of the following options.
 
-## Development
+```shell
+Usage: dev-tools [options]
+    -i, --install APP_NAME           The flag used to indicate the tool that needs to be installed.
+    -e, --environment ENVIRONMENT    Path to the file that contains the information about the development environment to setup.
+    -l, --list                       Displays a list of apps that can be installed.
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+## Sample environment file
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+```yml
+Apps:
+  vlc
+  sublime
+Environment:
+  ruby-on-rails
+```
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/devtools. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/mukeshsolanki/dev-tools. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
