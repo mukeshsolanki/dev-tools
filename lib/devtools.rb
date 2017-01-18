@@ -130,7 +130,7 @@ module Devtools
 
       if params.app_name.to_s.strip.length == 0  && params.environment.to_s.strip.length == 0 && params.list.to_s.strip.length == 0
         puts colorize("Error: Missing option", "Red")
-        options = %x( devtools -h )
+        options = %x( dev-tools -h )
         puts options
         exit
       else
@@ -172,7 +172,7 @@ module Devtools
       puts colorize("Info: List of apps you can install", "yellow")
       console_output =  %x( brew cask search )
       puts console_output
-      puts colorize("Info: To install any app execute `devtools -i app_name_for_the_list`", "green")
+      puts colorize("Info: To install any app execute `dev-tools -i app_name_for_the_list`", "green")
       exit
     end
 
