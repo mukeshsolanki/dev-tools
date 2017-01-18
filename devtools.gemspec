@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["themukeshsolanki@gmail.com"]
 
   spec.summary       = "A gem that removes the hassel of setting up your machine evertime you change to a new development device"
-  spec.description   = "DevTools is simple and easy to use it lets you setup your development enviroment with easy."
+  spec.description   = "A gem that removes the hassel of setting up your machine evertime you change to a new development device. DevTools is simple and easy to use it lets you setup your development enviroment with easy. Useage information at https://github.com/mukeshsolanki/dev-tools"
   spec.homepage      = "https://github.com/mukeshsolanki/dev-tools"
   spec.license       = "MIT"
 
